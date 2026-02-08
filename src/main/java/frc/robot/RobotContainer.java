@@ -10,6 +10,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -25,6 +26,9 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 import swervelib.SwerveInputStream;
+import frc.robot.subsystems.swervedrive.Vision;
+import frc.robot.subsystems.swervedrive.Vision.Cameras;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -46,6 +50,9 @@ public class RobotContainer
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/maxSwerve"));
 
+                           
+  private final Command aimAtTargetAutoCommand = drivebase.aimAtTarget(Cameras.CENTER_CAM);
+  
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */
@@ -96,7 +103,12 @@ public class RobotContainer
     DriverStation.silenceJoystickConnectionWarning(true);
 
     autChooser = AutoBuilder.buildAutoChooser("MiddleAuto");
+    autChooser.addOption("Aim at Target Command", aimAtTargetAutoCommand);
     SmartDashboard.putData("Auto Chooser",autChooser);
+
+    // Vision vision = drivebase.getVision();
+    // vision.getTargetFromId(7, vision.Cameras.camera);
+    //vision.getApriLTagPose(10, new Transform2d());
   }
 
   /**
