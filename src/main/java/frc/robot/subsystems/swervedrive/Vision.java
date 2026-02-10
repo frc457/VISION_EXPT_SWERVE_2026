@@ -100,7 +100,7 @@ public class Vision
         c.addToVisionSim(visionSim);
       }
 
-      openSimCameraViews();
+      // openSimCameraViews();
     }
   }
 

@@ -241,14 +241,14 @@ public class SwerveSubsystem extends SubsystemBase
   public Command aimAtTarget(Cameras camera, int targetID)
   {
     return run(() -> {
-      Optional<PhotonPipelineResult> resultO = camera.getLatestResult();
+      Optional<PhotonPipelineResult> resultO = camera.getBestResult();
       boolean targetInFOV = false;
 
       if (resultO.isPresent())
       {
         var result = resultO.get();
 
-        PhotonTrackedTarget desiredTarget = camera.getTarget(result, 25);
+        PhotonTrackedTarget desiredTarget = camera.getTarget(result, 28);
         SmartDashboard.putBoolean("AprilTag in Field of Vision:", desiredTarget != null);
 
         if (result.hasTargets() && desiredTarget != null) {
