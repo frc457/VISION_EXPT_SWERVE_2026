@@ -46,6 +46,8 @@ import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import org.json.simple.parser.ParseException;
 import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
+
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
@@ -56,6 +58,7 @@ import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SwerveSubsystem extends SubsystemBase
 {
@@ -235,24 +238,31 @@ public class SwerveSubsystem extends SubsystemBase
    *
    * @return A {@link Command} which will run the alignment.
    */
-  public Command aimAtTarget(Cameras camera)
+  public Command aimAtTarget(Cameras camera, int targetID)
   {
     return run(() -> {
-      Optional<PhotonPipelineResult> resultO = camera.getBestResult();
+      Optional<PhotonPipelineResult> resultO = camera.getLatestResult();
+      boolean targetInFOV = false;
+
       if (resultO.isPresent())
       {
         var result = resultO.get();
 
-        if (result.hasTargets() && result.getBestTarget().fiducialId == 25)
-        {
-          System.out.println("Aim at Target command running!");
+        PhotonTrackedTarget desiredTarget = camera.getTarget(result, 25);
+        SmartDashboard.putBoolean("AprilTag in Field of Vision:", desiredTarget != null);
+
+        if (result.hasTargets() && desiredTarget != null) {
           drive(getTargetSpeeds(0,
-                                0,
-                                Rotation2d.fromDegrees(-(result.getBestTarget()
-                                                             .getYaw())))); // Not sure if this will work, more math may be required.
+                              0,
+                              Rotation2d.fromDegrees(-(desiredTarget
+                                                          .getYaw())))); // Not sure if this will work, more math may be required.
         }
       }
-    });
+
+          
+        
+          
+     });
   }
 
   /**

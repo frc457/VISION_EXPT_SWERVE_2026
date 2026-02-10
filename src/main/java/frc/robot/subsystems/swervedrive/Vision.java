@@ -100,7 +100,7 @@ public class Vision
         c.addToVisionSim(visionSim);
       }
 
-      openSimCameraViews();
+      // openSimCameraViews();
     }
   }
 
@@ -497,6 +497,15 @@ public class Vision
         }
       }
       return Optional.of(bestResult);
+    }
+
+    public PhotonTrackedTarget getTarget(PhotonPipelineResult result, int targetID) {
+      for (PhotonTrackedTarget trackedTarget: result.getTargets()) {
+            if (trackedTarget.getFiducialId() == targetID) {
+              return trackedTarget;
+            }
+      }
+      return null;
     }
 
     /**
