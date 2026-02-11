@@ -51,7 +51,7 @@ public class RobotContainer
                                                                                 "swerve/maxSwerve"));
 
                            
-  private final Command aimAtTargetAutoCommand = drivebase.aimAtTarget(Cameras.CENTER_CAM, 28);
+  private final Command aimAtTargetAutoCommand = drivebase.aimAtTarget(Cameras.CENTER_CAM, 13);
   
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.

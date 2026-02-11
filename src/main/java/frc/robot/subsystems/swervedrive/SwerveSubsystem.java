@@ -248,7 +248,7 @@ public class SwerveSubsystem extends SubsystemBase
       {
         var result = resultO.get();
 
-        PhotonTrackedTarget desiredTarget = camera.getTarget(result, 28);
+        PhotonTrackedTarget desiredTarget = camera.getTarget(result, targetID);
         SmartDashboard.putBoolean("AprilTag in Field of Vision:", desiredTarget != null);
 
         if (result.hasTargets() && desiredTarget != null) {
