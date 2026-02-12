@@ -484,8 +484,15 @@ public class Vision
         return Optional.empty();
       }
 
-      PhotonPipelineResult bestResult       = resultsList.get(0);
-      double               amiguity         = bestResult.getBestTarget().getPoseAmbiguity();
+      PhotonPipelineResult bestResult = resultsList.get(0);
+      PhotonTrackedTarget bestTargetFromBestResult = bestResult.getBestTarget();
+
+      if (bestTargetFromBestResult == null) {
+        // Prevents getPoseAmbiguity() from being called on a null bestTarget
+        return Optional.of(bestResult);
+      }
+
+      double               amiguity         = bestTargetFromBestResult.getPoseAmbiguity();
       double               currentAmbiguity = 0;
       for (PhotonPipelineResult result : resultsList)
       {

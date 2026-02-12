@@ -45,6 +45,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import org.json.simple.parser.ParseException;
+import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
@@ -154,6 +155,7 @@ public class SwerveSubsystem extends SubsystemBase
     {
       swerveDrive.updateOdometry();
       vision.updatePoseEstimation(swerveDrive);
+
     }
   }
 
@@ -242,7 +244,6 @@ public class SwerveSubsystem extends SubsystemBase
   {
     return run(() -> {
       Optional<PhotonPipelineResult> resultO = camera.getBestResult();
-      boolean targetInFOV = false;
 
       if (resultO.isPresent())
       {
@@ -257,6 +258,9 @@ public class SwerveSubsystem extends SubsystemBase
                               Rotation2d.fromDegrees(-(desiredTarget
                                                           .getYaw())))); // Not sure if this will work, more math may be required.
         }
+        SmartDashboard.putNumber("Distance from AprilTag to Robot", vision.getDistanceFromAprilTag(targetID));
+        
+
       }
 
           
