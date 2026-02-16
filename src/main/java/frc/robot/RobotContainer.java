@@ -54,7 +54,7 @@ public class RobotContainer
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/maxSwerve"));
-       
+                                                                
   private final Command aimAtTargetAutoCommand = drivebase.aimAtTarget(Cameras.CENTER_CAM, AutonConstants.aimAtTargetID);
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
@@ -109,7 +109,7 @@ public class RobotContainer
     NamedCommands.registerCommand("Aim at Target Command", aimAtTargetAutoCommand);
     autChooser.addOption("Aim at Target Command", aimAtTargetAutoCommand);
     autChooser.addOption("Scoring Position Path", drivebase.getAutonomousCommand("ScoringPosition"));
-    SmartDashboard.putData("Auto Chooser",autChooser);
+    SmartDashboard.putData("Auto Chooser", autChooser);
 
     // Vision vision = drivebase.getVision();
     // vision.getTargetFromId(7, vision.Cameras.camera);

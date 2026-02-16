@@ -177,6 +177,7 @@ public class SwerveSubsystem extends SubsystemBase
       config = RobotConfig.fromGUISettings();
 
       final boolean enableFeedforward = true;
+      
       // Configure AutoBuilder last
       AutoBuilder.configure(
           this::getPose,
@@ -216,8 +217,7 @@ public class SwerveSubsystem extends SubsystemBase
             var alliance = DriverStation.getAlliance();
             if (alliance.isPresent())
             {
-              return false;
-              // return alliance.get() == DriverStation.Alliance.Red;
+              return alliance.get() == DriverStation.Alliance.Red;
             }
             return false;
           },
@@ -251,7 +251,7 @@ public class SwerveSubsystem extends SubsystemBase
         var result = resultO.get();
 
         PhotonTrackedTarget desiredTarget = camera.getTarget(result, targetID);
-        SmartDashboard.putBoolean("AprilTag in Field of Vision:", desiredTarget != null);
+        SmartDashboard.putBoolean("AprilTag " + targetID + " in Field of View:", desiredTarget != null);
 
         if (result.hasTargets() && desiredTarget != null) {
           drive(getTargetSpeeds(0,
@@ -269,6 +269,29 @@ public class SwerveSubsystem extends SubsystemBase
           
      });
   }
+
+  /*
+  * Aim at the nearest target command. Returns the command to perform the operation.
+  */
+  public Command aimAtTarget(Cameras camera)
+  {
+    return run(() -> {
+      Optional<PhotonPipelineResult> resultO = camera.getBestResult();
+      if (resultO.isPresent())
+      {
+        var result = resultO.get();
+
+        if (result.hasTargets())
+        {
+          drive(getTargetSpeeds(0,
+                                0,
+                                Rotation2d.fromDegrees(-(result.getBestTarget()
+                                                             .getYaw())))); // Not sure if this will work, more math may be required.
+        }
+      }
+    });
+  }
+
 
   /**
    * Get the path follower with events.
