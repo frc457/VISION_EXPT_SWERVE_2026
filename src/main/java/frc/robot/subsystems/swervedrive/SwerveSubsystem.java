@@ -270,6 +270,27 @@ public class SwerveSubsystem extends SubsystemBase
      });
   }
 
+  public Command experimentingWithPhotonVision(Cameras camera) {
+    return run(() -> {
+        Optional<PhotonPipelineResult> result = camera.getLatestResult();
+
+        if (result.isPresent()) {
+          PhotonPipelineResult latest = result.get();
+          PhotonTrackedTarget aprilTag = latest.getBestTarget();
+
+          if (aprilTag != null) {
+            SmartDashboard.putNumber("Distance to AprilTag", vision.getDistanceFromAprilTag(aprilTag.getFiducialId()));
+          }
+
+          
+
+        }
+
+
+
+    });
+  }
+
   /*
   * Aim at the nearest target command. Returns the command to perform the operation.
   */

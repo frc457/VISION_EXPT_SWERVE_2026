@@ -10,6 +10,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -56,6 +57,10 @@ public class RobotContainer
                                                                                 "swerve/maxSwerve"));
                                                                 
   private final Command aimAtTargetAutoCommand = drivebase.aimAtTarget(Cameras.CENTER_CAM, AutonConstants.aimAtTargetID);
+  private final Command photonVisionTesting = drivebase.experimentingWithPhotonVision(Cameras.CENTER_CAM);
+  private final Command driveToTargetCommand = drivebase.driveToPose(
+    drivebase.getVision().getAprilTagPose(AutonConstants.aimAtTargetID, new Transform2d(2, -0.50, new Rotation2d())));
+
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */
@@ -109,6 +114,8 @@ public class RobotContainer
     NamedCommands.registerCommand("Aim at Target Command", aimAtTargetAutoCommand);
     autChooser.addOption("Aim at Target Command", aimAtTargetAutoCommand);
     autChooser.addOption("Scoring Position Path", drivebase.getAutonomousCommand("ScoringPosition"));
+    autChooser.addOption("Experimenting with Photon Vision", photonVisionTesting);
+    autChooser.addOption("Drive to AprilTag", driveToTargetCommand);
     SmartDashboard.putData("Auto Chooser", autChooser);
 
     // Vision vision = drivebase.getVision();
