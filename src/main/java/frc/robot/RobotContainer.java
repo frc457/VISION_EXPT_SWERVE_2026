@@ -176,6 +176,7 @@ public class RobotContainer
       driverController.options().whileTrue(Commands.none());
       driverController.L1().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       driverController.R1().onTrue(Commands.none());
+      driverController.square().whileTrue(aimAtTargetAutoCommand);
     }
 
   }

@@ -359,7 +359,7 @@ public class Vision
     /**
      * Center Camera
      */
-    CENTER_CAM("center",
+    CENTER_CAM("CENTER_CAM",
                new Rotation3d(0, Units.degreesToRadians(18), 0),
                new Translation3d(Units.inchesToMeters(-4.628),
                                  Units.inchesToMeters(-10.687),
@@ -487,21 +487,28 @@ public class Vision
       PhotonPipelineResult bestResult = resultsList.get(0);
       PhotonTrackedTarget bestTargetFromBestResult = bestResult.getBestTarget();
 
-      if (bestTargetFromBestResult == null) {
+      if (bestResult == null || bestTargetFromBestResult == null) {
         // Prevents getPoseAmbiguity() from being called on a null bestTarget
         return Optional.of(bestResult);
       }
 
       double               amiguity         = bestTargetFromBestResult.getPoseAmbiguity();
       double               currentAmbiguity = 0;
+      
       for (PhotonPipelineResult result : resultsList)
       {
-        currentAmbiguity = result.getBestTarget().getPoseAmbiguity();
-        if (currentAmbiguity < amiguity && currentAmbiguity > 0)
-        {
-          bestResult = result;
-          amiguity = currentAmbiguity;
+        PhotonTrackedTarget bestTargetFromResult = result.getBestTarget();
+        if (bestTargetFromResult != null) {
+          currentAmbiguity = bestTargetFromResult.getPoseAmbiguity();
+
+          if (currentAmbiguity < amiguity && currentAmbiguity > 0)
+          {
+            bestResult = result;
+            amiguity = currentAmbiguity;
+          }
+
         }
+        
       }
       return Optional.of(bestResult);
     }
