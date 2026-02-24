@@ -133,7 +133,7 @@ public class Vision
   public void updatePoseEstimation(SwerveDrive swerveDrive)
   {
     if (SwerveDriveTelemetry.isSimulation && swerveDrive.getSimulationDriveTrainPose().isPresent())
-    {
+    
       /*
        * In the maple-sim, odometry is simulated using encoder values, accounting for factors like skidding and drifting.
        * As a result, the odometry may not always be 100% accurate.
@@ -142,7 +142,7 @@ public class Vision
        * Therefore, we must ensure that the actual robot pose is provided in the simulator when updating the vision simulation during the simulation.
        */
       visionSim.update(swerveDrive.getSimulationDriveTrainPose().get());
-    }
+    
     for (Cameras camera : Cameras.values())
     {
       Optional<EstimatedRobotPose> poseEst = getEstimatedGlobalPose(camera);
@@ -341,21 +341,21 @@ public class Vision
     /**
      * Left Camera
      */
-    LEFT_CAM("left",
-             new Rotation3d(0, Math.toRadians(-24.094), Math.toRadians(30)),
-             new Translation3d(Units.inchesToMeters(12.056),
-                               Units.inchesToMeters(10.981),
-                               Units.inchesToMeters(8.44)),
-             VecBuilder.fill(4, 4, 8), VecBuilder.fill(0.5, 0.5, 1)),
+    // LEFT_CAM("left",
+    //          new Rotation3d(0, Math.toRadians(-24.094), Math.toRadians(30)),
+    //          new Translation3d(Units.inchesToMeters(12.056),
+    //                            Units.inchesToMeters(10.981),
+    //                            Units.inchesToMeters(8.44)),
+    //          VecBuilder.fill(4, 4, 8), VecBuilder.fill(0.5, 0.5, 1)),
     /**
      * Right Camera
      */
-    RIGHT_CAM("right",
-              new Rotation3d(0, Math.toRadians(-24.094), Math.toRadians(-30)),
-              new Translation3d(Units.inchesToMeters(12.056),
-                                Units.inchesToMeters(-10.981),
-                                Units.inchesToMeters(8.44)),
-              VecBuilder.fill(4, 4, 8), VecBuilder.fill(0.5, 0.5, 1)),
+    // RIGHT_CAM("right",
+    //           new Rotation3d(0, Math.toRadians(-24.094), Math.toRadians(-30)),
+    //           new Translation3d(Units.inchesToMeters(12.056),
+    //                             Units.inchesToMeters(-10.981),
+    //                             Units.inchesToMeters(8.44)),
+    //           VecBuilder.fill(4, 4, 8), VecBuilder.fill(0.5, 0.5, 1)),
     /**
      * Center Camera
      */
@@ -390,6 +390,7 @@ public class Vision
      * Transform of the camera rotation and translation relative to the center of the robot
      */
     private final Transform3d                  robotToCamTransform;
+
     /**
      * Current standard deviations used.
      */
@@ -412,6 +413,7 @@ public class Vision
      */
     private       double                       lastReadTimestamp = Microseconds.of(NetworkTablesJNI.now()).in(Seconds);
 
+
     /**
      * Construct a Photon Camera class with help. Standard deviations are fake values, experiment and determine
      * estimation noise on an actual robot.
@@ -433,7 +435,6 @@ public class Vision
       robotToCamTransform = new Transform3d(robotToCamTranslation, robotToCamRotation);
 
       poseEstimator = new PhotonPoseEstimator(Vision.fieldLayout,
-                                              PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                                               robotToCamTransform);
       poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
@@ -566,7 +567,8 @@ public class Vision
         });
         if (!resultsList.isEmpty())
         {
-          updateEstimatedGlobalPose();
+          // updateEstimatedGlobalPose();
+
         }
       }
     }
