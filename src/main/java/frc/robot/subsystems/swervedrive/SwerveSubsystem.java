@@ -242,11 +242,11 @@ public class SwerveSubsystem extends SubsystemBase
    *
    * @return A {@link Command} which will run the alignment.
    */
-  public Command aimAtTarget(Cameras camera, int targetID)
+  public Command aimAtTarget(Cameras camera, int targetID, boolean stopWhenAimed)
   {
     return run(() -> {
       Optional<PhotonPipelineResult> resultO = camera.getBestResult();
-
+      
       if (resultO.isPresent())
       {
         var result = resultO.get();
@@ -271,6 +271,10 @@ public class SwerveSubsystem extends SubsystemBase
 
       }   
      }).until(() -> {
+      if (!stopWhenAimed) {
+        return false;
+      }
+      
       Optional<PhotonPipelineResult> resultO = camera.getBestResult();
 
       if (resultO.isPresent())

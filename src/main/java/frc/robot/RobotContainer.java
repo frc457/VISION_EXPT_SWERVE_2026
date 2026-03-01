@@ -56,7 +56,7 @@ public class RobotContainer
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/maxSwerve"));
                                                                 
-  private final Command aimAtTargetAutoCommand = drivebase.aimAtTarget(Cameras.CENTER_CAM, AutonConstants.aimAtTargetID);
+  private final Command aimAtTargetAutoCommand = drivebase.aimAtTarget(Cameras.CENTER_CAM, AutonConstants.aimAtTargetID, false);
   // private final Command aimAtTargetAutoCommand = drivebase.aimAtTarget(Cameras.CENTER_CAM);
 
   private final Command photonVisionTesting = drivebase.experimentingWithPhotonVision(Cameras.CENTER_CAM);
