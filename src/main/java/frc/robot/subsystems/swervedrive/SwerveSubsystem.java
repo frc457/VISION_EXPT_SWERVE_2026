@@ -255,20 +255,36 @@ public class SwerveSubsystem extends SubsystemBase
         SmartDashboard.putBoolean("AprilTag " + targetID + " in Field of View:", desiredTarget != null);
 
         if (result.hasTargets() && desiredTarget != null) {
+          SmartDashboard.putNumber("Distance from AprilTag to Robot", vision.getDistanceFromAprilTag(targetID));
           drive(getTargetSpeeds(0,
                               0,
                               Rotation2d.fromDegrees(-(desiredTarget
-                                                          .getYaw())))); // Not sure if this will work, more math may be required.
+                                                          .getYaw()))));
         }
-        SmartDashboard.putNumber("Distance from AprilTag to Robot", vision.getDistanceFromAprilTag(targetID));
+        else {
+          drive(getTargetSpeeds(0,
+                                0,
+                                Rotation2d.fromDegrees(0)));
+          
+        }
         
 
+      }   
+     }).until(() -> {
+      Optional<PhotonPipelineResult> resultO = camera.getBestResult();
+
+      if (resultO.isPresent())
+      {
+        var result = resultO.get();
+
+        PhotonTrackedTarget desiredTarget = camera.getTarget(result, targetID);
+
+        if (result.hasTargets() && desiredTarget != null) {
+          return swerveDrive.getPose().getRotation().getDegrees() == -desiredTarget.getYaw();
+        }
       }
-
-          
-        
-          
-     });
+      return false;
+      });
   }
 
   public Command experimentingWithPhotonVision(Cameras camera) {

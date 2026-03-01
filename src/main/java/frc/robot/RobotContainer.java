@@ -63,6 +63,7 @@ public class RobotContainer
   private final Command driveToTargetCommand = drivebase.driveToPose(
     drivebase.getVision().getAprilTagPose(AutonConstants.aimAtTargetID, new Transform2d(2, -0.50, new Rotation2d())));
 
+
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */
@@ -118,6 +119,7 @@ public class RobotContainer
     autChooser.addOption("Scoring Position Path", drivebase.getAutonomousCommand("ScoringPosition"));
     autChooser.addOption("Experimenting with Photon Vision", photonVisionTesting);
     autChooser.addOption("Drive to AprilTag", driveToTargetCommand);
+    autChooser.addOption("Test_One PathPlanner Command", drivebase.getAutonomousCommand("Test_One"));
     SmartDashboard.putData("Auto Chooser", autChooser);
 
     // Vision vision = drivebase.getVision();
